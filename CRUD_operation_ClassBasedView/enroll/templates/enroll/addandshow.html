@@ -1,0 +1,58 @@
+{% extends 'enroll/base.html' %}
+ {% block content %}
+
+
+ {% comment %} This form is for new registration {% endcomment %}
+<div class="row">
+  <div class="col-sm-4">
+    <h3 class="text-center alert alert-info">Register here</h3>
+    <form action="" method="POST">
+      {% csrf_token %}
+      <h3>{{FORM.as_p}}</h3>
+      <input type="submit" class="btn btn-success" value="ADD" />
+    </form>
+  </div>
+
+
+  {% comment %} This form is for showing data in display {% endcomment %}
+  <div class="col-sm-7 offset-1">
+    <h3 class="text-center alert alert-info">Show student details</h3>
+    {% if data %}               
+    <table class="table table-hover">
+      {% comment %} table heading {% endcomment %}
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Password</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+
+      {% comment %} table body {% endcomment %}
+      <tbody>
+        {% for st in data %}
+        <tr>
+          <th scope="row">{{st.id}}</th>
+          <td>{{st.name}}</td>
+          <td>{{st.email}}</td>
+          <td>{{st.password}}</td>
+          <td>                            {% comment %} edit button {% endcomment %}
+            <a href="{% url 'update' st.id %}" class="btn btn-warning btn-sm">Edit</a>
+            <form action="{% url 'deleteOne' st.id %}" method="POST" class="d-inline">
+              {% csrf_token %}
+              <input type="submit" value="Delete" class="btn btn-danger"> 
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% else %}
+    <h2 class="text-center alert alert-warning">No Records Found</h2>
+    {% endif %}
+  </div>
+</div>
+{% endblock content %}
